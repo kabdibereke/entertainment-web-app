@@ -1,0 +1,19 @@
+.svgIcon {
+    transition: 0.5s;
+    cursor: pointer;
+}
+
+.svgIcon:hover{
+    transition: 0.5s;
+    fill: var(--white);
+}
+
+.svgIconMain {
+    margin-bottom: 50px;
+}
+
+@media(max-width: 768px) {
+    .svgIconMain {
+        margin-bottom: 0;
+    }
+}
