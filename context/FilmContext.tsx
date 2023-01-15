@@ -53,7 +53,7 @@ export function FilmContextProvider({children}:IFilmContextProvider) {
   const getData= async()=> {
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:5000/data")
+      const res = await fetch("https://636d09feab4814f2b276b390.mockapi.io/todos")
       if(!res.ok) {
         throw new Error(`Could not fetch data, status: ${res.status}`);
       }
