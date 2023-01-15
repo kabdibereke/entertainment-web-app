@@ -22,6 +22,7 @@ export function FilmContextProvider({children}:IFilmContextProvider) {
   const [ items, setItems]  = useState<IFilms[]>([])
   const [error, setError] = useState('')
   const [loading,setLoading] = useState(false)
+  const  [count, setCount] =useState(0)
   const [
     signInWithEmailAndPassword,
     userSignin,
@@ -47,7 +48,7 @@ export function FilmContextProvider({children}:IFilmContextProvider) {
 
 
 
-    //  ОБРАТНО В ДОРОЖНИКИ???
+    
 
   useEffect(()=> {
   const getData= async()=> {
@@ -60,7 +61,7 @@ export function FilmContextProvider({children}:IFilmContextProvider) {
       const data = await res.json()
       setLoading(false);
       setData(data)
-
+      
     } catch (e) {
       setLoading(false);
       if (typeof e === "string") {
@@ -73,10 +74,43 @@ export function FilmContextProvider({children}:IFilmContextProvider) {
     getData()
   },[user])
 
+  useEffect(() => {
+    async function getData () {
+      try {
+        setLoading(true)
+        await onValue(ref(db), (snapshot) => {
+        setItems([]);
+        const data = snapshot.val() as IFilms;
+        const email = user?.email;
+        if (data !== null) {
+          Object.values(data).map((item) => {
+            if (email === item.user) {
+              setItems((oldArr) => [...oldArr, item]);
+              setCount(count=> count+1)
+            }
+          });
+        }else {}
+        setLoading(false)
+      });
+      } catch (e) {
+        setLoading(false);
+        if (typeof e === "string") {
+            setError(e); 
+        } else if (e instanceof Error) {
+            setError(e.message)
+        }   
+      }
+    }
+
+    getData()
+
+  }, [user]);
+
   useEffect(()=> {
 
     async function  writeUserData() {
     setLoading(true);
+    
     try {
       datas.map(async item=> {
         const id=nanoid()
@@ -123,6 +157,7 @@ export function FilmContextProvider({children}:IFilmContextProvider) {
         }
       })
       setLoading(false);
+
     } catch (e) {
       setLoading(false);
       if (typeof e === "string") {
@@ -133,43 +168,16 @@ export function FilmContextProvider({children}:IFilmContextProvider) {
     }
     
   }
-  if(items.length<=29) {
+  if(count<29) {
     if(user?.email){
       writeUserData()
     }
   }
 
-  },[user])
+  },[user,count])
 
 
-  useEffect(() => {
-    try {
-      setLoading(true)
-      onValue(ref(db), (snapshot) => {
-      setItems([]);
-      const data = snapshot.val() as IFilms;
-      const email = user?.email;
-      if (data !== null) {
-        Object.values(data).map((item) => {
-          if (email === item.user) {
-            setItems((oldArr) => [...oldArr, item]);
-          }
-        });
-      }
-      setLoading(false)
-    });
-    } catch (e) {
-      setLoading(false);
-      if (typeof e === "string") {
-          setError(e); 
-      } else if (e instanceof Error) {
-          setError(e.message)
-      }   
-    }
-
-  }, [user]);
-
-
+  
 
   const bookmarkedHandler = (items:IFilms) => {
     update(ref(db, `/${items.id}`), {
@@ -178,7 +186,7 @@ export function FilmContextProvider({children}:IFilmContextProvider) {
   };
 
   return (
-      <FilmContext.Provider value={{setData, datas, signInWithEmailAndPassword, loadingSignin,errorSignin,createUserWithEmailAndPassword,loadingSignup,errorSignup,user,items,bookmarkedHandler,loading,error}}>
+      <FilmContext.Provider value={{setItems, datas, signInWithEmailAndPassword, loadingSignin,errorSignin,createUserWithEmailAndPassword,loadingSignup,errorSignup,user,items,bookmarkedHandler,loading,error}}>
           {children}
       </FilmContext.Provider>
 

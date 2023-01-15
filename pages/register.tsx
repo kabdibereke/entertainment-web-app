@@ -50,7 +50,7 @@ const Register = () => {
     transition='0.1s linear'
     w="100%" minH="100vh" display="flex" justifyContent="center" flexDirection="column" alignItems="center" gap="50px">
     <Logo/>
-    <Box w={{base:'300px', sm:"400px"}}h="fit-content" bgColor="var(--second-color)" borderRadius="20px" padding="32px">
+    <Box w={{base:'100%', sm:"400px"}} padding={{base:'15px', sm:'32px'}} h="fit-content" bgColor="var(--second-color)" borderRadius="20px">
         <Text fontWeight="300" fontSize="32px" lineHeight="40px" letterSpacing="-0.5px">
             Register
             

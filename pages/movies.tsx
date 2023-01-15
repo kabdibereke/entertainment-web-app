@@ -10,43 +10,18 @@ import { useRouter } from 'next/router'
 
 export default function Movies() {
 
-   const {items,loading}  = useContext(FilmContext)  as IFilmsContextType
+   const {items,loading,user}  = useContext(FilmContext)  as IFilmsContextType
    const router= useRouter()
-   const [correctItems,setCorrectItems] = useState<IFilms[]>([])
-   const [newArr, setNewArr] = useState<IFilms[]>([])
+
 
    // console.log(items)
-   // useEffect(()=> {
-   //   if(!user){
-   //     router.push('/login')
-   //   }
-   // },[user])
    useEffect(()=> {
-      const t = items.filter(item=> item.isBookmarked)
-      setNewArr(t)
-     
-    },[items])
-    console.log(newArr)
-    useEffect(()=> {
-      const unique = [...new Map(items.map((m) =>  [m.title, m])).values()];
+      if(!user){
+        router.push('/login')
+      }
+    },[user])
 
-      for(let i=0; i<unique.length; i++) {
-          for (let j=0; j<newArr.length; j++) {
-              if(unique[i].title==newArr[j].title) {
-               unique[i].isBookmarked=true
   
-              }
-          }
-      } 
-      setCorrectItems(unique)
-    },[items,newArr])
-  
-  
-  //  useEffect(()=> {
-  //    if(!user){
-  //      router.push('/login')
-  //    }
-  //  },[user])
  
 
   return (
@@ -57,7 +32,7 @@ export default function Movies() {
       <>
       <Text fontSize="32px" mt="50px" mb="20px">Movies</Text>
       <Grid w="100%" templateColumns='repeat(auto-fit, minmax(280px, 1fr))' gap={2}>
-            {correctItems.map((item,index)=>{
+            {items.map((item,index)=>{
                if(item.category=="Movie") {
                return  <RegularItem key={index} {...item}/>
                }

@@ -22,36 +22,16 @@ import { useRouter } from 'next/router'
 
 export default function Home() {
   const router= useRouter()
-  const {items,loading}  = useContext(FilmContext)  as IFilmsContextType
-  const [correctItems,setCorrectItems] = useState<IFilms[]>([])
-  const [newArr, setNewArr] = useState<IFilms[]>([])
+  const {items,loading,user}  = useContext(FilmContext)  as IFilmsContextType
 
-  // console.log(items)
-  // useEffect(()=> {
-  //   if(!user){
-  //     router.push('/login')
-  //   }
-  // },[user])
+
+  useEffect(()=> {
+    if(!user){
+      router.push('/login')
+    }
+  },[user])
   
-  useEffect(()=> {
-    const t = items.filter(item=> item.isBookmarked)
-    setNewArr(t)
-   
-  },[items])
-  useEffect(()=> {
-    const unique = [...new Map(items.map((m) =>  [m.title, m])).values()];
-
-    for(let i=0; i<unique.length; i++) {
-        for (let j=0; j<newArr.length; j++) {
-            if(unique[i].title==newArr[j].title) {
-             unique[i].isBookmarked=true
-
-            }
-        }
-    } 
-    setCorrectItems(unique)
-  },[items,newArr])
-
+  
 
 
   return (
@@ -62,7 +42,7 @@ export default function Home() {
           <>
             <Text fontSize="32px">Trending</Text>
             <div className= 'box'>
-              {correctItems.map((item,index)=>{
+              {items.map((item,index)=>{
                 if(item.isTrending) {
                   
                   return <TrandingItem key={index} {...item} />
@@ -73,7 +53,7 @@ export default function Home() {
             </div>
             <Text fontSize="32px" mt="50px" mb="20px">Recommended for you</Text>
             <Grid w="100%" templateColumns='repeat(auto-fill, minmax(280px, 1fr))' justifyItems="center" alignContent="center" gap={2}>
-                  {correctItems?.map((item,index)=>{
+                  {items?.map((item,index)=>{
                       return  <RegularItem key={index} {...item}/>
                   })}
             </Grid>   

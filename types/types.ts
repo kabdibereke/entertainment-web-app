@@ -27,7 +27,7 @@ export interface IFilms {
 export interface IFilmsContextType {
   items:IFilms[],
   datas:IFilms[],
-  setData: Dispatch<SetStateAction<IFilms[]>>
+  setItems: Dispatch<SetStateAction<IFilms[]>>
   signInWithEmailAndPassword:(email: string, password: string) => Promise<UserCredential | undefined>
   loadingSignin:boolean,
   errorSignin:AuthError | undefined,
@@ -37,7 +37,8 @@ export interface IFilmsContextType {
   user:User | null | undefined,
   bookmarkedHandler: (items: IFilms) => void,
   loading:boolean,
-  error:string
+  error:string,
+  
 };
 
 
