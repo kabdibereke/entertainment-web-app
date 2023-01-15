@@ -1,19 +1,19 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Box,
         Input, 
         Text,    
         Button, 
         FormControl,
         } from "@chakra-ui/react"
-
 import Logo from '../assets/logo.svg'
 import { useForm,  SubmitHandler } from 'react-hook-form';
 import Link from 'next/link';
 import { FilmContext } from '../context/FilmContext';
 import { IFilmsContextType } from '../types/types';
 import { useRouter } from 'next/router';
-import { useSendPasswordResetEmail, useUpdatePassword } from 'react-firebase-hooks/auth';
+import { useSendPasswordResetEmail } from 'react-firebase-hooks/auth';
 import { auth } from '../firebase';
+import { motion } from 'framer-motion'
 type FormValues = {
     email: string;
     password:string;
@@ -28,23 +28,31 @@ const Register = () => {
         formState: { errors }
       } = useForm<FormValues>();
     const [email, setEmail] =useState('');
-    const [sendPasswordResetEmail, sending, error] = useSendPasswordResetEmail(
-        auth
-      );
-
+    const [sendPasswordResetEmail, sending, error] = useSendPasswordResetEmail( auth);
+    const {user}  = useContext(FilmContext)  as IFilmsContextType
+    
+    useEffect(()=> {
+        if(user){
+            router.push('/')
+        }
+    },[user])
      
     const onSubmit:SubmitHandler<FormValues> = async  (data:FormValues )=> {
         await  sendPasswordResetEmail(data.email)
-        if(typeof error !='undefined' ) {
-            router.push('/')
-        }
+        
         
     }
     
   return (
-    <Box w="100%" minH="100vh" display="flex" justifyContent="center" flexDirection="column" alignItems="center" gap="50px">
+    
+    <Box 
+    as={motion.div} 
+    initial={{ opacity: 0, scale: 0.5 }}
+    animate={{ opacity: 1, scale: 1 }}
+    transition='0.1s linear'
+    w="100%" minH="100vh" display="flex" justifyContent="center" flexDirection="column" alignItems="center" gap="50px">
     <Logo/>
-    <Box w="400px" h="fit-content" bgColor="var(--second-color)" borderRadius="20px" padding="32px">
+    <Box w={{base:'300px', sm:"400px"}} h="fit-content" bgColor="var(--second-color)" borderRadius="20px" padding="32px">
         <Text fontWeight="300" fontSize="32px" lineHeight="40px" letterSpacing="-0.5px">
             Reset Password
             

@@ -1,18 +1,13 @@
 import { Box,Text } from '@chakra-ui/react'
 import Image from 'next/image'
 import React, { useContext, useEffect, useState } from 'react'
-
 import BookmarEmptyIcon from '../../assets/icon-bookmark-empty.svg'
 import BookmarFullIcon from '../../assets/icon-bookmark-full.svg'
 import styles from './TrandingItem.module.css'
 import CategoryMovie from '../../assets/icon-category-movie.svg'
-
 import { IFilms, IFilmsContextType } from '../../types/types'
 import { FilmContext } from '../../context/FilmContext'
-import { addDoc, arrayUnion, collection, doc, updateDoc } from 'firebase/firestore'
-import { db } from '../../firebase'
-import { auth } from '../../firebase';
-
+import { motion } from 'framer-motion'
 const TrandingItem = (item:IFilms) => {
 
   const {user,bookmarkedHandler}  = useContext(FilmContext)  as IFilmsContextType
@@ -45,7 +40,12 @@ const TrandingItem = (item:IFilms) => {
   })
 
   return ( 
-   <Box position="relative"   minW={{ base: '235px', md: '470px'}}  height={{ base: '115px', md: '230px'}} 
+   <Box 
+    as={motion.div} 
+    initial={{ opacity: 0}}
+    animate={{ opacity: 1}}
+    transition='0.2s linear'
+   position="relative"   minW={{ base: '235px', md: '470px'}}  height={{ base: '115px', md: '230px'}} 
    >
      {item.thumbnail.trending && 
      <>

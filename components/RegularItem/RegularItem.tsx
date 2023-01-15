@@ -7,7 +7,7 @@ import styles from './RegularItem.module.css'
 import CategoryMovie from '../../assets/icon-category-movie.svg'
 import { IFilms, IFilmsContextType } from '../../types/types'
 import { FilmContext } from '../../context/FilmContext'
-
+import { motion } from 'framer-motion'
 
 
 const RegularItem = (item: IFilms) => {
@@ -24,7 +24,12 @@ const RegularItem = (item: IFilms) => {
 
   
   return (
-   <Box position="relative" w='280px' mb="20px"  zIndex="5"
+   <Box 
+   as={motion.div} 
+    initial={{ opacity: 0}}
+    animate={{ opacity: 1}}
+    transition='0.2s linear'
+   position="relative" w='280px' mb="20px"  zIndex="5"
    >
      <Box className={styles.wrapper}  position="absolute" borderRadius="100%" right="24px" top="16px" opacity="0.5" w="32px" h="32px" bgColor="var(--second-color)" display="flex" alignItems="center" justifyContent="center" cursor="pointer"  onClick={savedShows}>
       {!checked? <BookmarEmptyIcon className={styles.svgIcon}/> : <BookmarFullIcon/>}

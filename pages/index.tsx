@@ -38,10 +38,9 @@ export default function Home() {
     setNewArr(t)
    
   },[items])
-  console.log(newArr)
   useEffect(()=> {
     const unique = [...new Map(items.map((m) =>  [m.title, m])).values()];
-    setCorrectItems(unique)
+
     for(let i=0; i<unique.length; i++) {
         for (let j=0; j<newArr.length; j++) {
             if(unique[i].title==newArr[j].title) {

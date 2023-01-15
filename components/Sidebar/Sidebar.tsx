@@ -15,13 +15,18 @@ import { useRouter } from 'next/router'
 import { Avatar } from '@chakra-ui/react'
 import { useSignOut } from 'react-firebase-hooks/auth';
 import { auth } from '../../firebase'
-
+import { motion } from 'framer-motion'
 
 const Sidebar = () => {
   const [signOut, loading, error] = useSignOut(auth);
   const router = useRouter()
   return (
-    <Box bgColor="var(--second-color)"  w={{ base: '100%', md: '96px'}} h={{ base: '96px', md: '460px'}}    position={{ base: 'static', md: 'fixed'}}   paddingTop={{ base: '0', md: '35px'}} mt={{ base: '0', md: '32px'}}  ml={{ base: '0', md: '32px'}}  borderRadius="20px"   zIndex="66"> 
+    <Box 
+    as={motion.div} 
+    initial={{ opacity: 0}}
+    animate={{ opacity: 1}}
+    transition='0.2s linear'
+    bgColor="var(--second-color)"  w={{ base: '100%', md: '96px'}} h={{ base: '96px', md: '460px'}}    position={{ base: 'static', md: 'fixed'}}   paddingTop={{ base: '0', md: '35px'}} mt={{ base: '0', md: '32px'}}  ml={{ base: '0', md: '32px'}}  borderRadius="20px"   zIndex="66"> 
        <Box display="flex" flexDirection={{ base: 'row', md: 'column'}} w="100%" alignItems="center" justifyContent="space-between" h="100%">
           <Box display="flex"  flexDirection={{ base: 'row', md: 'column'}} alignItems="center"  gap="25px"  w="100%" justifyContent="center">
               <Logo  className={styles.svgIconMain} />

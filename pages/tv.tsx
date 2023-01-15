@@ -26,7 +26,6 @@ export default function Movies() {
     console.log(newArr)
     useEffect(()=> {
       const unique = [...new Map(items.map((m) =>  [m.title, m])).values()];
-      setCorrectItems(unique)
       for(let i=0; i<unique.length; i++) {
           for (let j=0; j<newArr.length; j++) {
               if(unique[i].title==newArr[j].title) {
@@ -53,7 +52,7 @@ export default function Movies() {
                <CircularProgress isIndeterminate size='200px' color='var(--blue)' />
             </div> :
          <>
-            <Text fontSize="32px" mt="50px" mb="20px">Movies</Text>
+            <Text fontSize="32px" mt="50px" mb="20px">TV Movies</Text>
             <Grid w="100%" templateColumns='repeat(auto-fit, minmax(280px, 1fr))' gap={2}>
                {correctItems.map((item,index)=>{
                   if(item.category=="TV Series") {

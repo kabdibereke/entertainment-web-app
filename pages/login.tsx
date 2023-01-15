@@ -1,22 +1,17 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Box,
-        Container,
         Input, 
         Text,
         Button, 
         FormControl,
-        FormLabel,
-        FormErrorMessage,} from "@chakra-ui/react"
+       } from "@chakra-ui/react"
 import Logo from '../assets/logo.svg'
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
-import { auth } from '../firebase';
 import Link from 'next/link';
-import Tranding from '../components/Tranding/Tranding';
 import { FilmContext } from '../context/FilmContext';
 import { IFilmsContextType } from '../types/types';
 import { useRouter } from 'next/router';
-import { User } from 'firebase/auth';
+import { motion } from 'framer-motion'
 
 type FormValues = {
     email: string;
@@ -36,20 +31,27 @@ const Login = () => {
     formState: { errors }
     } = useForm<FormValues>();
 
-
-    const onSubmit:SubmitHandler<FormValues> = async (data:FormValues )=> {
-        await  signInWithEmailAndPassword(data.email, data.password)
-        if(typeof errorSignin !='undefined' ) {
+    useEffect(()=> {
+        if(user){
             router.push('/')
         }
+    },[user])
+
+    const onSubmit:SubmitHandler<FormValues> = (data:FormValues )=> {
+        signInWithEmailAndPassword(data.email, data.password)
+        
        
     };
     
 
   return (
-    <Box w="100%" minH="100vh" display="flex" justifyContent="center" flexDirection="column" alignItems="center" gap="50px">
+    <Box as={motion.div} 
+    initial={{ opacity: 0, scale: 0.5 }}
+    animate={{ opacity: 1, scale: 1 }}
+    transition='0.1s linear'
+    w="100%" minH="100vh" display="flex" justifyContent="center" flexDirection="column" alignItems="center" gap="50px">
          <Logo/>
-         <Box w="400px" h="fit-content" bgColor="var(--second-color)" borderRadius="20px" padding="32px">
+         <Box w={{base:'300px', sm:"400px"}}  h="fit-content" bgColor="var(--second-color)" borderRadius="20px" padding="32px">
              <Text fontWeight="300" fontSize="32px" lineHeight="40px" letterSpacing="-0.5px">
                  Login
                  
