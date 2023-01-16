@@ -8,16 +8,15 @@ import CategoryMovie from '../../assets/icon-category-movie.svg'
 import { IFilms, IFilmsContextType } from '../../types/types'
 import { FilmContext } from '../../context/FilmContext'
 import { motion } from 'framer-motion'
+import { useRouter } from 'next/router'
 
 
 const RegularItem = (item: IFilms) => {
   const {user,bookmarkedHandler,writeData,datas}  = useContext(FilmContext)  as IFilmsContextType
-  const [checked, setChecked] =useState(false)
-
-   
-
-
- 
+  const [checked, setChecked] = useState(item.isBookmarked)
+  useEffect(()=> {
+    setChecked(checked)
+  },[datas])
 
   const savedShows = ()=> {
     if(!item.isBookmarked) {
@@ -27,9 +26,10 @@ const RegularItem = (item: IFilms) => {
       bookmarkedHandler(item)
 
     }
-    
-    setChecked(!checked)
+  
   }
+
+ 
 
   return (
    <Box 
@@ -39,7 +39,7 @@ const RegularItem = (item: IFilms) => {
     transition='0.2s linear'
    position="relative" w='280px' mb="20px"  zIndex="5"
    >
-     <Box className={styles.wrapper}  position="absolute" borderRadius="100%" right="24px" top="16px" opacity="0.5" w="32px" h="32px" bgColor="var(--second-color)" display="flex" alignItems="center" justifyContent="center" cursor="pointer"  onClick={savedShows}>
+     <Box onClick={()=>savedShows()} className={styles.wrapper}  position="absolute" borderRadius="100%" right="24px" top="16px" opacity="0.5" w="32px" h="32px" bgColor="var(--second-color)" display="flex" alignItems="center" justifyContent="center" cursor="pointer"  >
       {!checked? <BookmarEmptyIcon className={styles.svgIcon}/> : <BookmarFullIcon/>}
      </Box>
      <Image

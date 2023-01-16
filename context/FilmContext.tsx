@@ -22,8 +22,6 @@ export function FilmContextProvider({children}:IFilmContextProvider) {
   const [ items, setItems]  = useState<IFilms[]>([])
   const [error, setError] = useState('')
   const [loading,setLoading] = useState(false)
-    
-  const  [count, setCount] =useState(0)
   const [
     signInWithEmailAndPassword,
     userSignin,
@@ -46,10 +44,6 @@ export function FilmContextProvider({children}:IFilmContextProvider) {
         unsubsribe()
     }
   })
-
-
-
-    
 
   useEffect(()=> {
     const getData= async()=> {
@@ -76,6 +70,7 @@ export function FilmContextProvider({children}:IFilmContextProvider) {
   },[user])
 
   useEffect(() => {
+
     async function getData () {
       try {
           setLoading(true)
@@ -105,7 +100,6 @@ export function FilmContextProvider({children}:IFilmContextProvider) {
     }
 
     getData()
-    
   }, [user]);
 
  const writeData = async (item:IFilms)=> {
@@ -154,6 +148,7 @@ export function FilmContextProvider({children}:IFilmContextProvider) {
   }
   
  }
+ 
  useEffect(()=> {
   for (let i=0; i<items.length; i++) {
     for(let j=0; j<datas.length;j++) {
