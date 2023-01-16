@@ -4,7 +4,7 @@ import { useCreateUserWithEmailAndPassword, useSignInWithEmailAndPassword } from
 import { auth } from '../firebase';
 import { db } from "../firebase"
 import { IFilmContextProvider, IFilms, IFilmsContextType } from '../types/types' 
-import { getDatabase, onValue, ref, set, update } from "firebase/database";
+import { getDatabase, onValue, ref, remove, set, update } from "firebase/database";
 import { nanoid } from 'nanoid';
 import { useRouter } from 'next/router';
 
@@ -22,6 +22,7 @@ export function FilmContextProvider({children}:IFilmContextProvider) {
   const [ items, setItems]  = useState<IFilms[]>([])
   const [error, setError] = useState('')
   const [loading,setLoading] = useState(false)
+    
   const  [count, setCount] =useState(0)
   const [
     signInWithEmailAndPassword,
@@ -51,47 +52,48 @@ export function FilmContextProvider({children}:IFilmContextProvider) {
     
 
   useEffect(()=> {
-  const getData= async()=> {
-    setLoading(true);
-    try {
-      const res = await fetch("https://636d09feab4814f2b276b390.mockapi.io/todos")
-      if(!res.ok) {
-        throw new Error(`Could not fetch data, status: ${res.status}`);
+    const getData= async()=> {
+      setLoading(true);
+      try {
+        const res = await fetch("https://636d09feab4814f2b276b390.mockapi.io/todos")
+        if(!res.ok) {
+          throw new Error(`Could not fetch data, status: ${res.status}`);
+        }
+        const data = await res.json()
+        setLoading(false);
+        setItems(data)
+        
+      } catch (e) {
+        setLoading(false);
+        if (typeof e === "string") {
+            setError(e); 
+        } else if (e instanceof Error) {
+            setError(e.message)
+        }   
       }
-      const data = await res.json()
-      setLoading(false);
-      setData(data)
-      
-    } catch (e) {
-      setLoading(false);
-      if (typeof e === "string") {
-          setError(e); 
-      } else if (e instanceof Error) {
-          setError(e.message)
-      }   
     }
-  }
     getData()
   },[user])
 
   useEffect(() => {
     async function getData () {
       try {
-        setLoading(true)
-        await onValue(ref(db), (snapshot) => {
-        setItems([]);
-        const data = snapshot.val() as IFilms;
-        const email = user?.email;
-        if (data !== null) {
-          Object.values(data).map((item) => {
-            if (email === item.user) {
-              setItems((oldArr) => [...oldArr, item]);
-              setCount(count=> count+1)
-            }
-          });
-        }else {}
-        setLoading(false)
-      });
+          setLoading(true)
+          onValue(ref(db), (snapshot) => {
+          setData([]);
+          const data = snapshot.val() as IFilms;
+          const email = user?.email;
+          if (data !== null) {
+            Object.values(data).map((item) => {
+              if (email === item.user) {
+                setData((oldArr) => [...oldArr, item]);
+
+              }
+            });
+          }else {}
+          setLoading(false)
+        });
+        
       } catch (e) {
         setLoading(false);
         if (typeof e === "string") {
@@ -103,90 +105,73 @@ export function FilmContextProvider({children}:IFilmContextProvider) {
     }
 
     getData()
-
+    
   }, [user]);
 
-  useEffect(()=> {
-
-    async function  writeUserData() {
-    setLoading(true);
-    
-    try {
-      datas.map(async item=> {
-        const id=nanoid()
-        if(item.thumbnail.trending) {
-          return  await set(ref(db, id), {
-            id,
-            user: user?.email,
-            title: item.title,
-            thumbnail: {
-              trending: {
-                small:item.thumbnail.trending?.small,
-                large:item.thumbnail.trending?.large,
-              },
-              regular: {
-                small: item.thumbnail.regular.small,
-                medium: item.thumbnail.regular.medium,
-                large: item.thumbnail.regular.large
-              }
-            },
-            year: item.year,
-            category: item.category,
-            rating: item.rating,
-            isBookmarked: item.isBookmarked,
-            isTrending:  item.isTrending
-        } );
-        }else {
-          return await set(ref(db, id), {
-            id,
-            user: user?.email,
-            title: item.title,
-            thumbnail: {
-              regular: {
-                small: item.thumbnail.regular.small,
-                medium: item.thumbnail.regular.medium,
-                large: item.thumbnail.regular.large
-              }
-            },
-            year: item.year,
-            category: item.category,
-            rating: item.rating,
-            isBookmarked: item.isBookmarked,
-            isTrending:  item.isTrending
-          });
+ const writeData = async (item:IFilms)=> {
+    const id=nanoid()
+    if(item.thumbnail.trending) {
+      return  await set(ref(db, id), {
+      id,
+      user: user?.email,
+      title: item.title,
+      thumbnail: {
+        trending: {
+          small:item.thumbnail.trending?.small,
+          large:item.thumbnail.trending?.large,
+        },
+        regular: {
+          small: item.thumbnail.regular.small,
+          medium: item.thumbnail.regular.medium,
+          large: item.thumbnail.regular.large
         }
-      })
-      setLoading(false);
-
-    } catch (e) {
-      setLoading(false);
-      if (typeof e === "string") {
-          setError(e); 
-      } else if (e instanceof Error) {
-          setError(e.message)
-      }   
-    }
+      },
+      year: item.year,
+      category: item.category,
+      rating: item.rating,
+      isBookmarked: true,
+      isTrending:  item.isTrending
+    } );
+  }else {
+    return await set(ref(db, id), {
+      id,
+      user: user?.email,
+      title: item.title,
+      thumbnail: {
+        regular: {
+          small: item.thumbnail.regular.small,
+          medium: item.thumbnail.regular.medium,
+          large: item.thumbnail.regular.large
+        }
+      },
+      year: item.year,
+      category: item.category,
+      rating: item.rating,
+      isBookmarked: true,
+      isTrending:  item.isTrending
+    });
     
   }
-  if(count<29) {
-    if(user?.email){
-      writeUserData()
+  
+ }
+ useEffect(()=> {
+  for (let i=0; i<items.length; i++) {
+    for(let j=0; j<datas.length;j++) {
+      if(items[i].id==datas[j].id) {
+        items[i] =datas[j]
+      }
     }
   }
+  console.log(items)
 
-  },[user,count])
-
-
-  
+  },[datas])
 
   const bookmarkedHandler = (items:IFilms) => {
-    update(ref(db, `/${items.id}`), {
-      isBookmarked: !items.isBookmarked,
-    });
+      remove(ref(db, `/${items.id}`));
   };
 
   return (
-      <FilmContext.Provider value={{setItems, datas, signInWithEmailAndPassword, loadingSignin,errorSignin,createUserWithEmailAndPassword,loadingSignup,errorSignup,user,items,bookmarkedHandler,loading,error}}>
+      <FilmContext.Provider value={{setItems, datas, signInWithEmailAndPassword, loadingSignin,errorSignin,createUserWithEmailAndPassword,loadingSignup,errorSignup,user,items,bookmarkedHandler,loading,error,writeData}}>
           {children}
       </FilmContext.Provider>
 

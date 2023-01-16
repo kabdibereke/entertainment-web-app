@@ -1,6 +1,6 @@
 import { Box,Text } from '@chakra-ui/react'
 import Image from 'next/image'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useMemo, useState } from 'react'
 import BookmarEmptyIcon from '../../assets/icon-bookmark-empty.svg'
 import BookmarFullIcon from '../../assets/icon-bookmark-full.svg'
 import styles from './TrandingItem.module.css'
@@ -10,18 +10,27 @@ import { FilmContext } from '../../context/FilmContext'
 import { motion } from 'framer-motion'
 const TrandingItem = (item:IFilms) => {
 
-  const {user,bookmarkedHandler}  = useContext(FilmContext)  as IFilmsContextType
+  const {user,bookmarkedHandler,writeData,datas,items}  = useContext(FilmContext)  as IFilmsContextType
   const [checked, setChecked] =useState(item.isBookmarked)
   const [isMobile, setIsMobile] = useState(false)
   
   
+ 
+
   const savedShows = ()=> {
-    bookmarkedHandler(item)
-    setChecked(!item.isBookmarked)
-    console.log(item.id)
+    if(!item.isBookmarked) {
+      writeData(item)
+      
+    }else {
+      bookmarkedHandler(item)
+
+    }
+    
+    setChecked(!checked)
   }
   
- 
+
+
   const handleResize = () => {
     if (window.innerWidth < 587) {
         setIsMobile(true)

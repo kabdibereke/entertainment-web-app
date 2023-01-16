@@ -7,7 +7,7 @@ import { useRouter } from 'next/router'
 
 export default function Movies() {
 
-   const {user,loading,items}  = useContext(FilmContext)  as IFilmsContextType
+   const {user,loading,items,datas}  = useContext(FilmContext)  as IFilmsContextType
    const router= useRouter()
 
 
@@ -17,6 +17,7 @@ export default function Movies() {
       }
     },[user])
 
+    
   
   return (
       <Box w="100%" minH="1080px" pl={{ base: '0', md: '131px'}} >
@@ -26,7 +27,7 @@ export default function Movies() {
             </div> :
          <>
             <Text fontSize="32px" mt="50px" mb="20px">TV Movies</Text>
-            <Grid w="100%" templateColumns='repeat(auto-fit, minmax(280px, 1fr))' gap={2}>
+            <Grid w="100%" templateColumns='repeat(auto-fit, minmax(280px, 1fr))' justifyItems="center" alignContent="center" gap={2}>
                {items.map((item,index)=>{
                   if(item.category=="TV Series") {
                   return  <RegularItem key={index} {...item}/>

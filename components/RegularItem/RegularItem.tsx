@@ -11,18 +11,26 @@ import { motion } from 'framer-motion'
 
 
 const RegularItem = (item: IFilms) => {
-  const {user,bookmarkedHandler}  = useContext(FilmContext)  as IFilmsContextType
-  const [checked, setChecked] =useState(item.isBookmarked)
+  const {user,bookmarkedHandler,writeData,datas}  = useContext(FilmContext)  as IFilmsContextType
+  const [checked, setChecked] =useState(false)
 
    
 
+
+ 
+
   const savedShows = ()=> {
-    bookmarkedHandler(item)
-    setChecked(!item.isBookmarked)
-    console.log(item.id)
+    if(!item.isBookmarked) {
+      writeData(item)
+      
+    }else {
+      bookmarkedHandler(item)
+
+    }
+    
+    setChecked(!checked)
   }
 
-  
   return (
    <Box 
    as={motion.div} 

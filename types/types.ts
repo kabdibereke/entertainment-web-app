@@ -38,6 +38,7 @@ export interface IFilmsContextType {
   bookmarkedHandler: (items: IFilms) => void,
   loading:boolean,
   error:string,
+  writeData: (item: IFilms) => Promise<void>
   
 };
 

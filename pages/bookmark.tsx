@@ -9,7 +9,7 @@ import { useRouter } from 'next/router'
 
 
 export default function Movies() {
-   const {user,loading,items}  = useContext(FilmContext)  as IFilmsContextType
+   const {user,loading,datas}  = useContext(FilmContext)  as IFilmsContextType
    const router= useRouter()
  
 
@@ -32,8 +32,8 @@ export default function Movies() {
             </div> :
          <>
             <Text fontSize="32px" mt="50px" mb="20px">Bookmarked Movies</Text>
-            <Grid w="100%" templateColumns='repeat(auto-fit, minmax(280px, 1fr))' gap={2}>
-               {items.map((item,index)=>{
+            <Grid w="100%" templateColumns='repeat(auto-fit, minmax(280px, 1fr))' justifyItems="center" alignContent="center" gap={2}>
+               {datas.map((item,index)=>{
                   if(item.category=="Movie" && item.isBookmarked) {
                      return  <RegularItem key={index} {...item}/>
                   }else {
@@ -43,8 +43,8 @@ export default function Movies() {
                   
             </Grid>
             <Text fontSize="32px" mt="50px" mb="20px">Bookmarked TV Movies</Text>
-            <Grid w="100%" templateColumns='repeat(auto-fit, minmax(280px, 1fr))' gap={2}>
-               {items.map((item,index)=>{
+            <Grid w="100%" templateColumns='repeat(auto-fit, minmax(280px, 1fr))' justifyItems="center" alignContent="center" gap={2}>
+               {datas.map((item,index)=>{
                   if(item.category=="TV Series" && item.isBookmarked) {
                   return  <RegularItem key={index} {...item}/>
                   }
