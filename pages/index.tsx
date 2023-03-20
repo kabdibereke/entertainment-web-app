@@ -23,7 +23,7 @@ export default function Home() {
   const dispatch =useDispatch<AppDispatch>()
   const [user, loading, error] = useAuthState(auth);
   const [flag,setFlag] =useState(true)
-  
+ 
   const checkUser =async ()=> {
       let flag=true
       await onValue(ref(db), async (snapshot) => {
@@ -56,7 +56,10 @@ export default function Home() {
        })
        
     });
-    checkUser()
+    const storaged =localStorage.getItem('created')
+    if(storaged==null) {
+      checkUser()
+    }
   },[user?.email])
 
 
@@ -64,7 +67,7 @@ export default function Home() {
  
   
   const handleCheck=(checked:boolean,id:number)=> {
-
+    localStorage.setItem('created', 'true')
     update(ref(db, `/${user?.email?.replace('.','')}/data/${id}`), {
       isBookmarked: !checked,
     });

@@ -45,7 +45,7 @@ const Login = () => {
 
     const onSubmit:SubmitHandler<FormValues> = (data:FormValues )=> {
         signInWithEmailAndPassword(data.email, data.password)
-        localStorage.setItem('user',data.email)
+       
         
        
     };
