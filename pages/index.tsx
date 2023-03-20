@@ -23,17 +23,8 @@ export default function Home() {
   const dispatch =useDispatch<AppDispatch>()
   const [user, loading, error] = useAuthState(auth);
   const [flag,setFlag] =useState(true)
-  useEffect(() => {
-   if(user) {
-    if (user?.email) {
-      console.log("signed in!");
-    } else if (user?.email == null) {
-      router.push("/login");
-    }
-   }
-  }, [user?.email]);
+  
   const checkUser =async ()=> {
-    if(user) {
       let flag=true
       await onValue(ref(db), async (snapshot) => {
       const data =  await snapshot.val();
@@ -49,7 +40,6 @@ export default function Home() {
           data: data
         });
       }
-    }
   }
   useEffect(()=> {
     onValue(ref(db), async (snapshot) => {

@@ -44,9 +44,8 @@ const Login = () => {
     },[user?.user.email])
 
     const onSubmit:SubmitHandler<FormValues> = (data:FormValues )=> {
-        if(data.password){
-            signInWithEmailAndPassword(data.email, data.password)
-        }
+        signInWithEmailAndPassword(data.email, data.password)
+        localStorage.setItem('user',data.email)
         
        
     };
@@ -89,7 +88,6 @@ const Login = () => {
                      {...register("password", {
                      required: true, 
                      minLength: 6 })} 
-                     onChange={(e:React.ChangeEvent<HTMLInputElement>)=> setPassword(e.target.value)}
                      type="password"
                      placeholder="Password" border="none" borderRadius="0" borderBottom= "2px solid var(--blue)" fontWeight="300" fontSize="15px" color="var(--white)" _focus={{border:"none",  borderRadius:"0", borderBottom: "2px solid var(--white)"}} />
                      {errors?.password?.type === "required" && <Text color="var(--red)" fontSize="13px"> 

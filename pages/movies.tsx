@@ -17,15 +17,7 @@ export default function Movies() {
   const dispatch =useDispatch<AppDispatch>()
   const [user, loading, error] = useAuthState(auth);
   const router= useRouter()
-  useEffect(() => {
-   if(user) {
-    if (user?.email) {
-      console.log("signed in!");
-    } else if (user?.email == null) {
-      router.push("/login");
-    }
-   }
-  }, [user?.email]);
+ 
   useEffect(()=> {
     onValue(ref(db), async (snapshot) => {
       const data =  await snapshot.val();
