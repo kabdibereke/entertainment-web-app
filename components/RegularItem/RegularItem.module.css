@@ -1,0 +1,7 @@
+.wrapper:hover .svgIcon path {
+    stroke:black;
+    fill:white
+}
+.svgIcon:hover path {
+    
+}
