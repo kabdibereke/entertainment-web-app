@@ -50,7 +50,7 @@ const Sidebar = () => {
                   const success = await signOut();
                   if (success) {
                     alert('You are sign out');
-                    
+                    localStorage.removeItem('created')
                     router.push('/login')
                   }
               }}>

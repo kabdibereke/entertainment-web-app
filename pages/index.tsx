@@ -31,6 +31,7 @@ export default function Home() {
       Object.keys(data).forEach((item,index)=> {
          if(item==user?.email?.replace('.','')) {
           flag=false
+          localStorage.setItem('created', 'true')
          }
       })
       
