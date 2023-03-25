@@ -46,11 +46,9 @@ const Register = () => {
     },[user])
     const onSubmit:SubmitHandler<FormValues> = async  (data:FormValues )=> {
         await  createUserWithEmailAndPassword(data.email, data.password)
-        if(!error){
-            set(ref(db, `/${data.email.replace('.','')}`), {
+       set(ref(db, `/${data.email.replace('.','')}`), {
                 data: films
-            });
-        }
+        });
     }
     
   return (
