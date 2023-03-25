@@ -24,31 +24,31 @@ export default function Home() {
   const [user, loading, error] = useAuthState(auth);
   const [flag,setFlag] =useState(true)
  
-  const checkUser =async ()=> {
-      let flag=true
-      await onValue(ref(db), async (snapshot) => {
-      const data =  await snapshot.val();
-      Object.keys(data).forEach((item,index)=> {
-         if(item==user?.email?.replace('.','')) {
-          flag=false
-          localStorage.setItem('created', 'true')
-         }
-      })
+  // const checkUser =async ()=> {
+  //     let flag=true
+  //     await onValue(ref(db), async (snapshot) => {
+  //     const data =  await snapshot.val();
+  //     Object.keys(data).forEach((item,index)=> {
+  //        if(item==user?.email?.replace('.','')) {
+  //         flag=false
+  //         localStorage.setItem('created', 'true')
+  //        }
+  //     })
       
-      });
-      if(flag) {
-        set(ref(db, `/${user?.email?.replace('.','')}`), {
-          data: data
-        });
-      }
-  }
+  //     });
+  //     if(flag) {
+  //       set(ref(db, `/${user?.email?.replace('.','')}`), {
+  //         data: data
+  //       });
+  //     }
+  // }
   useEffect(()=> {
     onValue(ref(db), async (snapshot) => {
       const data =  await snapshot.val();
       Object.keys(data).forEach((item,index)=> {
          if(item==user?.email?.replace('.','')) {
            console.log('sdsadas')
-           setFlag(false)
+          //  setFlag(false)
            //@ts-ignore
            dispatch(addFilms(Object.values(data)[index]?.data!))
 
@@ -57,18 +57,18 @@ export default function Home() {
        })
        
     });
-    const storaged =localStorage.getItem('created')
-    if(storaged==null) {
-      checkUser()
-    }
-  },[user?.email])
+    // const storaged =localStorage.getItem('created')
+    // if(storaged==null) {
+    //   checkUser()
+    // }
+    },[user?.email])
 
 
 
  
   
   const handleCheck=(checked:boolean,id:number)=> {
-    localStorage.setItem('created', 'true')
+    // localStorage.setItem('created', 'true')
     update(ref(db, `/${user?.email?.replace('.','')}/data/${id}`), {
       isBookmarked: !checked,
     });

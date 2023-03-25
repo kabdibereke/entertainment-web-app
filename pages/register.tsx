@@ -12,7 +12,9 @@ import Link from 'next/link';
 import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { useRouter } from 'next/router';
 import { motion } from 'framer-motion'
-import { auth } from '../firebase';
+import { auth, db } from '../firebase';
+import { onValue, ref, set, update } from 'firebase/database'
+import { data as films } from '../mock'
 type FormValues = {
     email: string;
     password:string;
@@ -44,8 +46,11 @@ const Register = () => {
     },[user])
     const onSubmit:SubmitHandler<FormValues> = async  (data:FormValues )=> {
         await  createUserWithEmailAndPassword(data.email, data.password)
-     
-       
+        if(!error){
+            set(ref(db, `/${data.email.replace('.','')}`), {
+                data: films
+            });
+        }
     }
     
   return (
