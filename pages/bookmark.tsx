@@ -48,7 +48,7 @@ export default function Movies() {
             </div> :
          <>
             <Text fontSize="32px" mt="50px" mb="20px">Bookmarked Movies</Text>
-            <Grid w="100%" templateColumns='repeat(auto-fit, minmax(280px, 320px))'   >
+            <Grid w="100%" templateColumns='repeat(auto-fit, minmax(280px, 320px))' justifyContent="center"  >
                {films.map((item,index)=>{
                   if(item.category=="Movie" && item.isBookmarked) {
                      return  <RegularItem key={index} id={index}  item={item} handleCheck={handleCheck}/>
@@ -59,7 +59,7 @@ export default function Movies() {
                   
             </Grid>
             <Text fontSize="32px" mt="50px" mb="20px">Bookmarked TV Movies</Text>
-            <Grid w="100%" templateColumns='repeat(auto-fit, minmax(280px, 320px))'  >
+            <Grid w="100%" templateColumns='repeat(auto-fit, minmax(280px, 320px))' justifyContent="center" >
                {films.map((item,index)=>{
                   if(item.category=="TV Series" && item.isBookmarked) {
                   return  <RegularItem key={index} id={index}  item={item} handleCheck={handleCheck}/>
